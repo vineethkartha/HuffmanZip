@@ -1,0 +1,5 @@
+* Top Level Functional requirements
+** Read a file
+   This can be a file on the disk or a string passed for testing
+** Create a frequency map of the characters
+   This has to be kept along with the file handler

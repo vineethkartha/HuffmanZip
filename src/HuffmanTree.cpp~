@@ -1,0 +1,39 @@
+#include "includes/HuffmanTree.hpp"
+#include "FileHandler.hpp"
+#include <iostream>
+
+HuffmanTree::HuffmanTree(FileHandler &fh) {
+    
+    for(unsigned char i = 0;i < 127;i++) {
+      if(fh.getFreq(i)) {
+	HuffmanTreeNode *node = new HuffmanTreeNode(i, fh.getFreq(i));
+	tree.push(node);
+      }
+    }
+    while(tree.size() != 1) {
+      auto left = tree.top();
+      tree.pop();
+      auto right = tree.top();
+      tree.pop();
+
+      HuffmanTreeNode *temp = new HuffmanTreeNode('=', *left + *right);
+      temp->addLeftNode(left);
+      temp->addRightNode(right);
+      tree.push(temp);
+    }
+  }
+ 
+
+  void HuffmanTree::printC() {
+    printCodes(tree.top(),"");
+  }
+
+  void HuffmanTree::printCodes(HuffmanTreeNode *node,std::string str) {
+    if(node == nullptr)
+      return;
+    if(node->getData() !='=') {
+      std::cout<<node->getData()<<":"<<str<<"\n";
+    }
+    printCodes(node->getLeftNode(),str+"0");
+    printCodes(node->getRightNode(),str+"1");
+  }

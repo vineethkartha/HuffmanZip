@@ -1,0 +1,75 @@
+#ifndef HUFFMANTREE_HPP
+#define HUFFMANTREE_HPP
+
+#include <queue>
+#include <iostream>
+
+class FileHandler;
+
+class HuffmanTreeNode {
+public:
+  HuffmanTreeNode(char data, unsigned int freq) {
+    this->left = nullptr;
+    this->right = nullptr;
+    this->data = data;
+    this->freq = freq;
+  }
+  ~HuffmanTreeNode();
+
+  unsigned int getFreq() const {
+    return this->freq;
+  }
+
+  void addLeftNode(HuffmanTreeNode *node) {
+    this->left = node;
+  }
+
+  HuffmanTreeNode* getLeftNode() const {
+    return(this->left);
+  }
+
+  void addRightNode(HuffmanTreeNode *node) {
+    this->right = node;
+  }
+
+  HuffmanTreeNode* getRightNode() const {
+    return(this->right);
+  }
+
+  char getData() const{
+    return this->data;
+  }
+  
+  bool operator >(HuffmanTreeNode &node) {
+    return (this->freq >= node.getFreq());
+  }
+
+  unsigned int operator +(HuffmanTreeNode &node) {
+    return(this->freq + node.getFreq());
+  }
+  
+private:
+  HuffmanTreeNode *left, *right;
+  char data;
+  unsigned int freq = 0;
+};
+
+
+struct compare {
+  bool operator()(HuffmanTreeNode *left, HuffmanTreeNode *right) {
+    return(left->getFreq() > right->getFreq());
+  }
+};
+
+class HuffmanTree {
+public:
+  HuffmanTree(FileHandler &f);
+  void printC();
+  void printCodes(HuffmanTreeNode *node, std::string str);
+  
+private:
+  int size;
+  std::priority_queue<HuffmanTreeNode*,std::vector<HuffmanTreeNode*>,compare> tree;
+};
+
+#endif

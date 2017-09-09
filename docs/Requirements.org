@@ -1,0 +1,21 @@
+* Top Level Functional requirements
+** DONE Read a file
+   This can be a file on the disk or a string passed for testing
+** DONE Create a frequency map of the characters
+   This has to be kept along with the file handler
+** Create the huffman tree with this frequency map 
+   This will take the frequency map as the argument
+   Also create the Huffman lookup table
+** Encoder class
+   This class takes the Huffman lookup table and the file stream and packs the bits
+** Write File
+   Write the compressed file into a file
+
+* Objects in the Program
+** DONE File
+*** Freaquency map
+** TODO Huffman tree 
+** TODO Huffman Lookup Table
+
+* TODO Add Unittests with gtest
+* TODO Add doxygen style comments and generate doxygen
