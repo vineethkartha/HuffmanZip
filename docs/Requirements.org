@@ -19,3 +19,11 @@
 
 * TODO Add Unittests with gtest
 * TODO Add doxygen style comments and generate doxygen
+
+* The Classes To be Used
+
+** HuffmanTree
+   This class get data and converts the data to huffman tree and also helps in decoding
+** File Handler
+   This class is responsible for handling the File objects. This should take care of providing 
+   streams of data to the 

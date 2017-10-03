@@ -64,13 +64,15 @@ struct compare {
 
 class HuffmanTree {
 public:
-  HuffmanTree(FileHandler &f);
+  HuffmanTree(std::string inFileName, std::string compressedFileName);
   void printC();
   void writetoFile();
   
 private:
   std::map<char, std::string> lookUpTable;
   std::priority_queue<HuffmanTreeNode*,std::vector<HuffmanTreeNode*>,compare> tree;
+  FileHandler *inFile;
+  FileHandler *compressedFile;
   void codeRetreiver(HuffmanTreeNode *node, std::string str);
 };
 

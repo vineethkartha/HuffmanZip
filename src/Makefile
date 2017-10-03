@@ -16,3 +16,5 @@ FileHandler.o: FileHandler.cpp
 	$(CXX) $(CFLAGS) -I $(Includes) -c -o FileHandler.o FileHandler.cpp
 clean:
 	rm *.o
+runtests:
+	$(CXX) ./test/sampleTest.cpp -DSTAND_ALONE -lboost_unit_test_framework -o tests

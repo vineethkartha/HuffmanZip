@@ -4,11 +4,19 @@
 #include <iostream>
 #include <fstream>
 
-HuffmanTree::HuffmanTree(FileHandler &fh) {
-    
+// Try to refactor this class such that the class takes
+// input from an interface class and gives out put to an interface class 
+
+// should this be made explicit ?
+// Is this constructor doing too much work ?
+HuffmanTree::HuffmanTree(std::string inFileName, std::string compressedFileName) {
+  this->inFile = new FileHandler(inFileName);
+  this->compressedFile = new FileHandler(compressedFileName);
+  
+  inFile->setMap();
   for(unsigned char i = 0;i < 127;i++) {
-    if(fh.getFreq(i)) {
-      HuffmanTreeNode *node = new HuffmanTreeNode(i, fh.getFreq(i));
+    if(inFile->getFreq(i)) {
+      HuffmanTreeNode *node = new HuffmanTreeNode(i, inFile->getFreq(i));
       tree.push(node);
     }
   }
@@ -37,12 +45,12 @@ void HuffmanTree::printC() {
 
 void HuffmanTree::writetoFile() {
   std::ofstream fil;
-  std::ifstream origFil;
-  origFil.open("/home/kartha/Projects/HuffmanZip/data/sample.txt");
+  std::ifstream inFile;
+  inFile.open("/home/kartha/Projects/HuffmanZip/data/sample.txt");
   //fil.open("encrypt.txt");
   char c;
   std::string str="";
-  while(origFil>>c) {
+  while(inFile>>c) {
     std::string code = this->lookUpTable[c];
     str = str + code;
   }

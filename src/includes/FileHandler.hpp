@@ -6,7 +6,7 @@
 class FileHandler {
 
 public:
-  
+  FileHandler () {}  
   FileHandler(FileHandler &f) {
     this->fileName = f.getFileName();
     this->file.open(this->fileName);
@@ -24,6 +24,15 @@ public:
   
   std::string getFileName() {
     return this->fileName;
+  }
+
+  /*std::istream& operator>>(std::istream& lhs, ) {
+
+    }*/
+  char getCh() {
+    char ch;
+    file >>ch;
+    return ch;
   }
   
   void setMap();
