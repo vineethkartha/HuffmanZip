@@ -69,6 +69,7 @@ public:
   void printC();
   void writetoFile();
   void canonHuffman();
+  void decode(std::string str);
   
 private:
   std::map<char, boost::dynamic_bitset<>> lookUpTable;

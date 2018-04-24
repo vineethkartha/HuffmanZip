@@ -3,7 +3,7 @@
 
 void FileHandler::setMap() {
   char c;
-  while(this->file>>c) {
+  while(file.get(c)) {
     this->map[c]++;
   }
 }

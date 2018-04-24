@@ -37,7 +37,7 @@ HuffmanTree::HuffmanTree(std::string inFileName, std::string compressedFileName)
 void HuffmanTree::printC() {
   this->codeRetreiver(tree.top(),"");
   for(auto &code :this->lookUpTable) {
-    std::cout<<code.first<<":"<<code.second<<"\n";
+    //std::cout<<code.first<<":"<<code.second<<"\n";
   }
   //boost::archive::text_oarchive oa{std::cout};
   //oa << this->lookUpTable;
@@ -47,15 +47,21 @@ void HuffmanTree::writetoFile() {
   std::ofstream fil;
   std::ifstream inFile;
   inFile.open("/home/kartha/Projects/HuffmanZip/data/sample.txt");
-  //fil.open("encrypt.txt");
+  fil.open("encrypt.txt");
   char c;
   std::string str="";
-  while(inFile>>c) {
+  fil<<sorted.size()<<"\n";
+  for(auto &code :this->sorted) {
+    fil<<code.first<<":"<<(int)code.second<<"\n";
+  }
+
+  while(inFile.get(c)) {
     // xxx NEED TO REDO
     std::string code;
     boost::to_string(this->lookUpTable[c],code);
     str = str + code;
   }
+  fil<<str.length()<<"\n";
   auto len = str.length();
   len = len/8 +1;
   char bitstream[len]={0};
@@ -69,8 +75,10 @@ void HuffmanTree::writetoFile() {
   }
   bitstream[i/8] = bitstream[i/8]<<((len*8)-str.length() -1);
   std::cout<<"The code is\n"<<str<<"\n";
-  std::cout<<"The bitstream is\n"<<bitstream<<"\n";
-
+  //std::cout<<"The bitstream is\n"<<bitstream<<"\n";
+  fil<<bitstream;
+  fil.close();
+  decode(str);
 }
 void HuffmanTree::codeRetreiver(HuffmanTreeNode *node,std::string str) {
   if(node == nullptr)
@@ -91,7 +99,7 @@ void HuffmanTree::canonHuffman() {
   }
   std::sort(sorted.begin(),sorted.end());
   for(auto &code :this->sorted) {
-    std::cout<<code.first<<":"<<code.second<<"\n";
+    //std::cout<<code.first<<":"<<code.second<<"\n";
   }
   // recreate the lookUpTable
   (this->lookUpTable).clear();
@@ -112,6 +120,26 @@ void HuffmanTree::canonHuffman() {
   }
 
    for(auto &code :this->lookUpTable) {
-    std::cout<<code.first<<":"<<code.second<<"\n";
+     // std::cout<<code.first<<":"<<code.second<<"\n";
   }
+}
+
+void HuffmanTree::decode(std::string str) {
+  // create a decode table with code as the key and symbol as value
+  std::map<std::string,char> decodeTable;
+  for(auto &code :this->lookUpTable) {
+    std::string tempC;
+    boost::to_string(code.second,tempC);
+    decodeTable[tempC] = code.first;
+  }
+  std::string outStr="";
+  std::string bits="";
+  for(int i = 0; i< str.length() ;++i) {
+    bits+=str[i];
+    if(decodeTable.find(bits) != decodeTable.end()) {
+      outStr += decodeTable[bits];
+      bits ="";
+    }
+  }
+  std::cout<<"\nDecoded text is\n"<<outStr;
 }
