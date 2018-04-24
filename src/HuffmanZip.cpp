@@ -7,5 +7,9 @@ int main() {
   std::string inFileName = "/home/kartha/Projects/HuffmanZip/data/sample.txt";
   HuffmanTree *hf = new HuffmanTree(inFileName, "sampleCompressed.txt");
   hf->printC();
+  hf->canonHuffman();
   hf->writetoFile();
+
+  //  hf->printC();
+
 }

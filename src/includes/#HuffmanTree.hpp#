@@ -4,8 +4,7 @@
 #include <queue>
 #include <iostream>
 #include <map>
-#include <bitset>
-#include <boost/dynamic_bitset.hpp>
+
 class FileHandler;
 
 class HuffmanTreeNode {
@@ -65,14 +64,13 @@ struct compare {
 
 class HuffmanTree {
 public:
+  
   HuffmanTree(std::string inFileName, std::string compressedFileName);
   void printC();
   void writetoFile();
-  void canonHuffman();
   
 private:
-  std::map<char, boost::dynamic_bitset<>> lookUpTable;
-  std::vector<std::pair<int,char>> sorted;
+  std::map<char, std::string> lookUpTable;
   std::priority_queue<HuffmanTreeNode*,std::vector<HuffmanTreeNode*>,compare> tree;
   FileHandler *inFile;
   FileHandler *compressedFile;

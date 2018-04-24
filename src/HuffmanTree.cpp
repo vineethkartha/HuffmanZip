@@ -51,11 +51,13 @@ void HuffmanTree::writetoFile() {
   char c;
   std::string str="";
   while(inFile>>c) {
-    std::string code = this->lookUpTable[c];
+    // xxx NEED TO REDO
+    std::string code;
+    boost::to_string(this->lookUpTable[c],code);
     str = str + code;
   }
   auto len = str.length();
-  len = len/8;
+  len = len/8 +1;
   char bitstream[len]={0};
   int i=0;
   for(char &ch :str) {
@@ -65,6 +67,7 @@ void HuffmanTree::writetoFile() {
     }
     ++i;
   }
+  bitstream[i/8] = bitstream[i/8]<<((len*8)-str.length() -1);
   std::cout<<"The code is\n"<<str<<"\n";
   std::cout<<"The bitstream is\n"<<bitstream<<"\n";
 
@@ -73,9 +76,42 @@ void HuffmanTree::codeRetreiver(HuffmanTreeNode *node,std::string str) {
   if(node == nullptr)
     return;
   if(node->getData() !='=') {
-    this->lookUpTable[node->getData()] = str;
+    boost::dynamic_bitset<> b3(str);
+    this->lookUpTable[node->getData()] = b3;
     //std::cout<<node->getData()<<":"<<str<<"\n";
   }
   codeRetreiver(node->getLeftNode(),str+"0");
   codeRetreiver(node->getRightNode(),str+"1");
+}
+
+void HuffmanTree::canonHuffman() {
+  for (auto iterator = lookUpTable.begin(); iterator != lookUpTable.end(); ++iterator) {
+    char c = (*iterator).first;
+    sorted.push_back(std::make_pair<int,char&>(static_cast<int>((iterator->second).size()),c));
+  }
+  std::sort(sorted.begin(),sorted.end());
+  for(auto &code :this->sorted) {
+    std::cout<<code.first<<":"<<code.second<<"\n";
+  }
+  // recreate the lookUpTable
+  (this->lookUpTable).clear();
+  std::pair<int,char> temp(sorted[0]);
+  std::string code;
+  for(int i = 0 ;i < temp.first;++i)
+    code += "0";
+  boost::dynamic_bitset<> b3(code);
+  this->lookUpTable[temp.second] = b3;
+  for(auto it = sorted.begin() + 1 ; it!= sorted.end(); ++it) {
+    boost::dynamic_bitset<> bTemp(code);
+    auto t = bTemp.to_ulong();
+    t+=1;
+    t = t<<(it->first- (it-1)->first);
+    boost::dynamic_bitset<> bTemp1{it->first,t};
+    boost::to_string(bTemp1,code);
+    this->lookUpTable[it->second] = bTemp1;
+  }
+
+   for(auto &code :this->lookUpTable) {
+    std::cout<<code.first<<":"<<code.second<<"\n";
+  }
 }
